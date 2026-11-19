@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Shop prices. Variables: items (name, min, shop, url, shops), query,
+ * search (name, value, label) or null, unavailable (no answer from the API), source.
+ */
+#}
+<div class="satelit satelit--prices">
+  {% if search %}
+    <form class="satelit__search" method="get" role="search">
+      <label class="visually-hidden" for="satelit-q">{{ search.label }}</label>
+      <input id="satelit-q" type="search" name="{{ search.name }}" value="{{ search.value }}" minlength="2" maxlength="100">
+      <button type="submit">{{ search.label }}</button>
+    </form>
+  {% endif %}
+  {% if items %}
+  <ul class="satelit__list satelit__list--news">
+  {% for p in items %}
+    <li>
+      <span class="satelit__film-title">{{ p.name }}</span>
+      <span class="satelit__meta">
+        {% if p.shop %}{{ 'from @price MDL at'|t({'@price': p.min}) }} {% if p.url %}<a href="{{ p.url }}" rel="noopener nofollow">{{ p.shop }}</a>{% else %}{{ p.shop }}{% endif %}{% else %}{{ 'from @price MDL'|t({'@price': p.min}) }}{% endif %}
+        · {{ p.shops }}
+      </span>
+    </li>
+  {% endfor %}
+  </ul>
+  {% elseif search and not unavailable %}
+    <p class="satelit__empty">{{ 'Nothing found.'|t }}</p>
+  {% endif %}
+  {% include '@satelit/satelit-source.html.twig' %}
+</div>

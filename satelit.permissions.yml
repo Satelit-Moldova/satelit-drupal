@@ -1,0 +1,4 @@
+administer satelit:
+  title: 'Administer Satelit'
+  description: 'Set the Satelit API key and options.'
+  restrict access: true

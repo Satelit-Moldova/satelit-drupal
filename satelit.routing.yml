@@ -1,0 +1,7 @@
+satelit.settings:
+  path: '/admin/config/services/satelit'
+  defaults:
+    _form: '\Drupal\satelit\Form\SettingsForm'
+    _title: 'Satelit'
+  requirements:
+    _permission: 'administer satelit'

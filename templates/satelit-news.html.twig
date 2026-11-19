@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Latest news. Variables: items (title, url, outlet, time), source.
+ */
+#}
+<div class="satelit satelit--news">
+  <ul class="satelit__list satelit__list--news">
+  {% for n in items %}
+    <li>
+      {% if n.url %}<a href="{{ n.url }}" rel="noopener nofollow">{{ n.title }}</a>{% else %}{{ n.title }}{% endif %}
+      <span class="satelit__meta">{{ n.time }}{% if n.outlet %} · {{ n.outlet }}{% endif %}</span>
+    </li>
+  {% endfor %}
+  </ul>
+  {% include '@satelit/satelit-source.html.twig' %}
+</div>

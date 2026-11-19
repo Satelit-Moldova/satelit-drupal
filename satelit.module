@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @file
+ * Satelit: Moldova data blocks from the Satelit API.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function satelit_help(string $route_name, RouteMatchInterface $route_match): ?string {
+  if ($route_name === 'help.page.satelit') {
+    return '<p>' . t('Blocks with BNM exchange rates, fuel prices, latest news, cinema today and shop prices from the <a href=":docs">Satelit API</a>. Save your key at <a href=":settings">Configuration → Web services → Satelit</a>, then place the blocks in Block layout.', [
+      ':docs' => 'https://developer.satelit.md/en/docs/',
+      ':settings' => '/admin/config/services/satelit',
+    ]) . '</p>';
+  }
+  return NULL;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function satelit_theme(): array {
+  return [
+    'satelit_rates' => ['variables' => ['rows' => [], 'date' => '', 'source' => []]],
+    'satelit_fuel' => ['variables' => ['rows' => [], 'cheapest' => [], 'date' => '', 'source' => []]],
+    'satelit_news' => ['variables' => ['items' => [], 'source' => []]],
+    'satelit_cinema' => ['variables' => ['cinemas' => [], 'date' => '', 'source' => []]],
+    'satelit_prices' => ['variables' => ['items' => [], 'query' => '', 'search' => NULL, 'unavailable' => FALSE, 'source' => []]],
+  ];
+}
+
+/**
+ * Implements hook_cron().
+ *
+ * Drupal's Internal Page Cache keeps pages for anonymous visitors until a
+ * cache tag is invalidated (it ignores max-age), so cron invalidates each
+ * kind's tag once its time has passed.
+ */
+function satelit_cron(): void {
+  $state = \Drupal::state();
+  $now = \Drupal::time()->getRequestTime();
+  $last = (array) $state->get('satelit.invalidated', []);
+  $tags = [];
+
+  foreach (['rates' => 10800, 'fuel' => 7200, 'news' => 900, 'cinema' => 900, 'prices' => 10800] as $kind => $ttl) {
+    if ($now - (int) ($last[$kind] ?? 0) >= $ttl) {
+      $tags[] = 'satelit:' . $kind;
+      $last[$kind] = $now;
+    }
+  }
+
+  if ($tags) {
+    Cache::invalidateTags($tags);
+    $state->set('satelit.invalidated', $last);
+  }
+}

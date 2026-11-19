@@ -1,0 +1,62 @@
+satelit.settings:
+  type: config_object
+  label: 'Satelit settings'
+  mapping:
+    lang:
+      type: string
+      label: 'Data language (empty = the page language)'
+    base_url:
+      type: string
+      label: 'API address (empty = https://api.satelit.md/v1)'
+
+block.settings.satelit_rates:
+  type: block_settings
+  label: 'Satelit: BNM rates block'
+  mapping:
+    codes:
+      type: string
+      label: 'Currency codes'
+
+block.settings.satelit_fuel:
+  type: block_settings
+  label: 'Satelit: fuel prices block'
+  mapping:
+    networks:
+      type: integer
+      label: 'Cheapest networks listed'
+
+block.settings.satelit_news:
+  type: block_settings
+  label: 'Satelit: latest news block'
+  mapping:
+    count:
+      type: integer
+      label: 'Number of stories'
+    category:
+      type: string
+      label: 'Category key'
+
+block.settings.satelit_cinema:
+  type: block_settings
+  label: 'Satelit: cinema today block'
+  mapping:
+    city:
+      type: string
+      label: 'City'
+    posters:
+      type: boolean
+      label: 'Show posters'
+
+block.settings.satelit_prices:
+  type: block_settings
+  label: 'Satelit: shop prices block'
+  mapping:
+    query:
+      type: string
+      label: 'Search words'
+    count:
+      type: integer
+      label: 'Products shown'
+    visitors:
+      type: boolean
+      label: 'Visitors may search'

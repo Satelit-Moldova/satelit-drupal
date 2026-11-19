@@ -1,0 +1,5 @@
+satelit.settings:
+  title: 'Satelit'
+  description: 'API key and options for the Satelit data blocks.'
+  route_name: satelit.settings
+  parent: system.admin_config_services

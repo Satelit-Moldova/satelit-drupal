@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Cinema today. Variables: cinemas (name, films: title, poster, times: time, format, url), date, source.
+ */
+#}
+<div class="satelit satelit--cinema">
+  {% if date %}<p class="satelit__date">{{ date }}</p>{% endif %}
+  {% for c in cinemas %}
+    <h3 class="satelit__cinema">{{ c.name }}</h3>
+    <ul class="satelit__films">
+    {% for f in c.films %}
+      <li class="satelit__film">
+        {% if f.poster %}<img class="satelit__poster" src="{{ f.poster }}" alt="" width="46" height="69" loading="lazy">{% endif %}
+        <div>
+          <span class="satelit__film-title">{{ f.title }}</span>
+          <ul class="satelit__times">
+          {% for s in f.times %}
+            <li>{% if s.url %}<a href="{{ s.url }}" rel="noopener nofollow">{{ s.time }}</a>{% else %}{{ s.time }}{% endif %}{% if s.format %} <small>{{ s.format }}</small>{% endif %}</li>
+          {% endfor %}
+          </ul>
+        </div>
+      </li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p class="satelit__empty">{{ 'No more sessions today.'|t }}</p>
+  {% endfor %}
+  {% include '@satelit/satelit-source.html.twig' %}
+</div>

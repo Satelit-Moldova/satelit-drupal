@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * BNM exchange rates. Variables: rows (code, name, value, change, trend), date, source.
+ */
+#}
+<div class="satelit satelit--rates">
+  {% if date %}<p class="satelit__date">{{ date }}</p>{% endif %}
+  <table class="satelit__table">
+    <thead><tr>
+      <th scope="col">{{ 'Currency'|t }}</th>
+      <th scope="col" class="satelit__num">MDL</th>
+      <th scope="col" class="satelit__num">{{ '7 days'|t }}</th>
+    </tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <th scope="row"><abbr title="{{ r.name }}">{{ r.code }}</abbr></th>
+        <td class="satelit__num">{{ r.value }}</td>
+        <td class="satelit__num"><span class="satelit__{{ r.trend }}">{{ r.change }}</span></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% include '@satelit/satelit-source.html.twig' %}
+</div>

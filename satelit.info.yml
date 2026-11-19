@@ -1,0 +1,7 @@
+name: Satelit
+type: module
+description: 'Moldova data blocks from the Satelit API: BNM exchange rates, fuel prices, latest news, cinema today and shop price search.'
+package: Web services
+core_version_requirement: ^10.3 || ^11
+php: 8.1
+configure: satelit.settings

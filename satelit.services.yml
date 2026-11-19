@@ -1,0 +1,15 @@
+services:
+  cache.satelit:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: ['@cache_factory', 'get']
+    arguments: [satelit]
+
+  logger.channel.satelit:
+    parent: logger.channel_base
+    arguments: ['satelit']
+
+  satelit.client:
+    class: Drupal\satelit\SatelitClient
+    arguments: ['@http_client', '@cache.satelit', '@state', '@config.factory', '@logger.channel.satelit', '@language_manager', '@datetime.time']

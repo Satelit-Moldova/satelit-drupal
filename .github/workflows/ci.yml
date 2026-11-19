@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - drupal: '^10.3'
+            php: '8.3'
+          - drupal: '^11'
+            php: '8.3'
+          - drupal: '^11'
+            php: '8.4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: satelit
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: gd, pdo_sqlite
+          coverage: none
+      - name: Lint
+        run: find satelit -name '*.php' -o -name '*.module' | xargs -n1 php -l > /dev/null
+      - name: Drupal ${{ matrix.drupal }} with the module (Composer path repository)
+        run: |
+          composer create-project --no-interaction --no-progress "drupal/recommended-project:${{ matrix.drupal }}" site
+          cd site
+          composer config repositories.satelit '{"type":"path","url":"../satelit","options":{"symlink":false}}'
+          composer require --no-interaction --no-progress "satelit-moldova/satelit-drupal:*@dev"
+          composer require --dev --no-interaction --no-progress -W "drupal/core-dev:${{ matrix.drupal }}"
+      - name: Offline unit tests
+        run: cd site && vendor/bin/phpunit -c web/core web/modules/contrib/satelit/tests
